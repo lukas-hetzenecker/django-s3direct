@@ -55,7 +55,9 @@ def create_upload_data(content_type, key, acl, bucket=None, cache_control=None,
     secret_access_key = settings.AWS_SECRET_ACCESS_KEY
     bucket = bucket or settings.AWS_STORAGE_BUCKET_NAME
     region = getattr(settings, 'S3DIRECT_REGION', None)
-    if not region or region == 'us-east-1':
+    if getattr(settings, 'S3DIRECT_ENDPOINT', None):
+        endpoint = settings.S3DIRECT_ENDPOINT
+    elif not region or region == 'us-east-1':
         endpoint = 's3.amazonaws.com'
     else:
         endpoint = 's3-%s.amazonaws.com' % region
